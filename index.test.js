@@ -5,6 +5,10 @@ test("initializes database", async() => {
     await db.serialize(true);
 })
 
+test("force updates database", async() => {
+    await db.updateDatabase();
+})
+
 test("adds test with content test", async() => {
     await db.add("test", "test");
     expect(await db.get("test")).toBe("test");

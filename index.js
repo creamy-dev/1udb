@@ -17,13 +17,15 @@ class Database {
             if (!wipe) {
                 data = await fs.readFileSync(this.name, 'utf8');
             } else {
-                throw("uwu *wipes file cutely*") // Copilot can't handle the "uwu"
+                throw("Wipe file")
             }
         } catch (e) {
-            data = await fs.writeFileSync(this.name, `{"keys": [], "names": []}`);
+            await fs.writeFileSync(this.name, `{"keys": [], "names": []}`);
+            data = `{"keys": [], "names": []}`;
         }
 
         this.name = path.join(this.name);
+        this.json = JSON.parse(data);
     }
 
     /**
@@ -32,8 +34,7 @@ class Database {
      * @param {string} value item to be stored
      */
     async add(key, value) {
-        let data = await fs.readFileSync(this.name, 'utf8');
-        let json = JSON.parse(data);
+        let json = this.json;
 
         let writeKeys = json.keys;
         let writeNames = json.names;
@@ -41,21 +42,12 @@ class Database {
         writeKeys.push(key);
         writeNames.push(value);
 
-        for (let i = 0; i < writeKeys.length; i++) {
-            if (typeof writeKeys[i] === 'string') {
-                writeKeys[i] = `"${writeKeys[i]}"`;
-            }
+        json.keys = writeKeys;
+        json.names = writeNames;
 
-            if (typeof writeNames[i] === 'string') {
-                writeNames[i] = `"${writeNames[i]}"`;
-            }
+        this.json = json;
 
-            if (typeof writeNames[i] === 'object') {
-                writeNames[i] = JSON.stringify(writeNames[i]);
-            }
-        }
-
-        await fs.writeFileSync(this.name, `{"keys": [${writeKeys.join(", ")}], "names": [${writeNames.join(", ")}]}`);
+        await this.updateDatabase();
     }
 
     /**
@@ -64,8 +56,8 @@ class Database {
      * @returns parsed data from database
      */
     async get(key) {
-        let data = await fs.readFileSync(this.name, 'utf8');
-        data = JSON.parse(data);
+        let data = this.json;
+
         let keys = data.keys;
         let index = keys.indexOf(key);
 
@@ -98,21 +90,8 @@ class Database {
             }
         }
 
-        for (let i = 0; i < writeKeys.length; i++) {
-            if (typeof writeKeys[i] === 'string') {
-                writeKeys[i] = `"${writeKeys[i]}"`;
-            }
-
-            if (typeof writeNames[i] === 'string') {
-                writeNames[i] = `"${writeNames[i]}"`;
-            }
-
-            if (typeof writeNames[i] === 'object') {
-                writeNames[i] = JSON.stringify(writeNames[i]);
-            }
-        }
-
-        await fs.writeFileSync(this.name, `{"keys": [${writeKeys.join(", ")}], "names": [${writeNames.join(", ")}]}`);
+        this.json = json;
+        await this.updateDatabase();
     }
 
     /**
@@ -121,8 +100,7 @@ class Database {
      * @returns JSON object with name and value of item
      */
     async query(value) {
-        let data = await fs.readFileSync(this.name, 'utf8');
-        let json = JSON.parse(data);
+        let json = this.json;
 
         for (let i = 0; i < json.keys.length; i++) {
             let names = json.names[i];
@@ -142,8 +120,7 @@ class Database {
      * @param {string} value value to change data to
      */
     async changeValue(key, value) {
-        let data = await fs.readFileSync(this.name, 'utf8');
-        let json = JSON.parse(data);
+        let json = this.json;
 
         let writeKeys = json.keys;
         let writeNames = json.names;
@@ -151,21 +128,12 @@ class Database {
         let index = writeKeys.indexOf(key);
         writeNames[index] = value;
 
-        for (let i = 0; i < writeKeys.length; i++) {
-            if (typeof writeKeys[i] === 'string') {
-                writeKeys[i] = `"${writeKeys[i]}"`;
-            }
+        json.keys = writeKeys;
+        json.names = writeNames;
 
-            if (typeof writeNames[i] === 'string') {
-                writeNames[i] = `"${writeNames[i]}"`;
-            }
+        this.json = json;
 
-            if (typeof writeNames[i] === 'object') {
-                writeNames[i] = JSON.stringify(writeNames[i]);
-            }
-        }
-
-        await fs.writeFileSync(this.name, `{"keys": [${writeKeys.join(", ")}], "names": [${writeNames.join(", ")}]}`);
+        await this.updateDatabase();
     }
 
     /**
@@ -174,10 +142,7 @@ class Database {
      * @param {string} newKey new name of key
      */
     async changeKey(key, newKey) {
-        const fs = require('fs');
-
-        let data = await fs.readFileSync(this.name, 'utf8');
-        let json = JSON.parse(data);
+        let json = this.json;
 
         let writeKeys = json.keys;
         let writeNames = json.names;
@@ -185,6 +150,23 @@ class Database {
         let index = writeKeys.indexOf(key);
 
         writeKeys[index] = newKey;
+
+        json.keys = writeKeys;
+        json.names = writeNames;
+
+        this.json = json;
+
+        await this.updateDatabase();
+    }
+
+    /**
+     * updates database files
+     */
+    async updateDatabase() {
+        let json = this.json;
+
+        let writeKeys = json.keys;
+        let writeNames = json.names;
 
         for (let i = 0; i < writeKeys.length; i++) {
             if (typeof writeKeys[i] === 'string') {
@@ -200,7 +182,9 @@ class Database {
             }
         }
 
-        await fs.writeFileSync(this.name, `{"keys": [${writeKeys.join(", ")}], "names": [${writeNames.join(", ")}]}`);
+        this.json = `{"keys": [${writeKeys.join(", ")}], "names": [${writeNames.join(", ")}]}`;
+        await fs.writeFileSync(this.name, this.json);
+        this.json = JSON.parse(this.json);
     }
 
     /**
