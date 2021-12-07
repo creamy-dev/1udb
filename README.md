@@ -24,3 +24,5 @@ async function main() {
 main();
 ```
 For examples, I'd recommend looking at the jest test suite in index.test.js.
+## Commiting information
+If adding something important, add an test in index.test.js, and be sure to jsdoc the new function.  
