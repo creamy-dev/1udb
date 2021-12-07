@@ -178,6 +178,36 @@ class Database {
         await fs.writeFileSync(this.name, `{"keys": [${writeKeys.join(", ")}], "names": [${writeNames.join(", ")}]}`);
     }
 
+    async changeKey(key, newKey) {
+        const fs = require('fs');
+
+        let data = await fs.readFileSync(this.name, 'utf8');
+        let json = JSON.parse(data);
+
+        let writeKeys = json.keys;
+        let writeNames = json.names;
+    
+        let index = writeKeys.indexOf(key);
+
+        writeKeys[index] = newKey;
+
+        for (let i = 0; i < writeKeys.length; i++) {
+            if (typeof writeKeys[i] === 'string') {
+                writeKeys[i] = `"${writeKeys[i]}"`;
+            }
+
+            if (typeof writeNames[i] === 'string') {
+                writeNames[i] = `"${writeNames[i]}"`;
+            }
+
+            if (typeof writeNames[i] === 'object') {
+                writeNames[i] = JSON.stringify(writeNames[i]);
+            }
+        }
+
+        await fs.writeFileSync(this.name, `{"keys": [${writeKeys.join(", ")}], "names": [${writeNames.join(", ")}]}`);
+    }
+
     /**
      * pre-initialization of database; ran when typing 'const db = new Database()'
      * @param {string} name location of database

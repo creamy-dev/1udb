@@ -45,7 +45,12 @@ test("renames content of test to be '1udb'", async() => {
     expect(await db.get("test")).toBe("1udb");
 })
 
-test("removes test", async() => {
-    await db.remove("test");
-    expect(await db.get("test")).toBe(null);
+test("renames test to be 'windows'", async() => {
+    await db.changeKey("test", "windows");
+    expect(await db.get("windows")).toBe("1udb");
+})
+
+test("removes windows", async() => {
+    await db.remove("windows");
+    expect(await db.get("windows")).toBe(null);
 })
