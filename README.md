@@ -1,10 +1,17 @@
 # 1udb
 Imagine a database as lite as a 1U chassis.
 ## Installation Instructions
-NPM install '@creamy-dev/1udb'.
+NPM install '@creamy-dev/1udb', in production mode.
+```
+npm install @creamy-dev/1udb --production
+```
+### Commiting installation instructions
+Full install '@creamy-dev/1udb'.
 ```
 npm install @creamy-dev/1udb
 ```
+## Documentation
+### Initiation
 In your main file, require 1udb, and initialize a database.
 ```
 const Database = require('@creamy-dev/1udb');
@@ -16,3 +23,4 @@ async function main() {
 
 main();
 ```
+For examples, I'd recommend looking at the jest test suite in index.test.js.
