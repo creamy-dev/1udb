@@ -1,14 +1,16 @@
+const fs = require('fs');
+const path = require('path');
+
 /**
  * class for database
  */
+
 class Database {
     /**
      * initializes the database by setting some internal paramaters.
      * @param {boolean} wipe if true, wipe the database 
      */
     async serialize(wipe) {
-        const fs = require('fs');
-        const path = require('path');
         let data = {};
         
         try {
@@ -30,8 +32,6 @@ class Database {
      * @param {string} value item to be stored
      */
     async add(key, value) {
-        const fs = require('fs');
-
         let data = await fs.readFileSync(this.name, 'utf8');
         let json = JSON.parse(data);
 
@@ -64,9 +64,6 @@ class Database {
      * @returns parsed data from database
      */
     async get(key) {
-        const fs = require('fs');
-        const path = require('path');
-
         let data = await fs.readFileSync(this.name, 'utf8');
         data = JSON.parse(data);
         let keys = data.keys;
@@ -88,8 +85,6 @@ class Database {
      * @param {string} key item to remove from database 
      */
     async remove(key) {
-        const fs = require('fs');
-
         let data = await fs.readFileSync(this.name, 'utf8');
         let json = JSON.parse(data);
 
@@ -125,10 +120,7 @@ class Database {
      * @param {string} value value of item to search for
      * @returns JSON object with name and value of item
      */
-
     async query(value) {
-        const fs = require('fs');
-
         let data = await fs.readFileSync(this.name, 'utf8');
         let json = JSON.parse(data);
 
@@ -150,8 +142,6 @@ class Database {
      * @param {string} value value to change data to
      */
     async changeValue(key, value) {
-        const fs = require('fs');
-
         let data = await fs.readFileSync(this.name, 'utf8');
         let json = JSON.parse(data);
 
@@ -178,6 +168,11 @@ class Database {
         await fs.writeFileSync(this.name, `{"keys": [${writeKeys.join(", ")}], "names": [${writeNames.join(", ")}]}`);
     }
 
+    /**
+     * renames key in database
+     * @param {string} key original name of key 
+     * @param {string} newKey new name of key
+     */
     async changeKey(key, newKey) {
         const fs = require('fs');
 
