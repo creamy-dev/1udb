@@ -193,6 +193,7 @@ class Database {
      */
     constructor(name) {
         this.name = name;
+        this.json = {};
     }
 }
 
