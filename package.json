@@ -13,5 +13,8 @@
   "license": "MIT",
   "devDependencies": {
     "jest": "^27.4.3"
+  },
+  "jest": {
+    "verbose": true
   }
 }

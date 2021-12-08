@@ -77,8 +77,7 @@ class Database {
      * @param {string} key item to remove from database 
      */
     async remove(key) {
-        let data = await fs.readFileSync(this.name, 'utf8');
-        let json = JSON.parse(data);
+        let json = this.json;
 
         let writeKeys = json.keys;
         let writeNames = json.names;
@@ -90,7 +89,11 @@ class Database {
             }
         }
 
+        json.keys = writeKeys;
+        json.names = writeNames;
+
         this.json = json;
+
         await this.updateDatabase();
     }
 
@@ -162,38 +165,47 @@ class Database {
     /**
      * updates database files
      */
-    async updateDatabase() {
-        let json = this.json;
+    async updateDatabase(shouldBypassForce) {
+        if (this.force || shouldBypassForce) {
+            let json = this.json;
 
-        let writeKeys = json.keys;
-        let writeNames = json.names;
+            let writeKeys = json.keys;
+            let writeNames = json.names;
 
-        for (let i = 0; i < writeKeys.length; i++) {
-            if (typeof writeKeys[i] === 'string') {
-                writeKeys[i] = `"${writeKeys[i]}"`;
+            for (let i = 0; i < writeKeys.length; i++) {
+                if (typeof writeKeys[i] === 'string') {
+                    writeKeys[i] = `"${writeKeys[i]}"`;
+                }
+
+                if (typeof writeNames[i] === 'string') {
+                    writeNames[i] = `"${writeNames[i]}"`;
+                }
+
+                if (typeof writeNames[i] === 'object') {
+                    writeNames[i] = JSON.stringify(writeNames[i]);
+                }
             }
 
-            if (typeof writeNames[i] === 'string') {
-                writeNames[i] = `"${writeNames[i]}"`;
-            }
-
-            if (typeof writeNames[i] === 'object') {
-                writeNames[i] = JSON.stringify(writeNames[i]);
-            }
+            this.json = `{"keys": [${writeKeys.join(", ")}], "names": [${writeNames.join(", ")}]}`;
+            await fs.writeFileSync(this.name, this.json);
+            this.json = JSON.parse(this.json);
         }
-
-        this.json = `{"keys": [${writeKeys.join(", ")}], "names": [${writeNames.join(", ")}]}`;
-        await fs.writeFileSync(this.name, this.json);
-        this.json = JSON.parse(this.json);
     }
 
     /**
      * pre-initialization of database; ran when typing 'const db = new Database()'
      * @param {string} name location of database
+     * @param {boolean} shouldForceUpdate if false, run in "ramdisk"
      */
-    constructor(name) {
+    constructor(name, shouldForceUpdate) {
         this.name = name;
         this.json = {};
+
+        if (shouldForceUpdate) {
+            this.force = false;
+        } else {
+            this.force = true;
+        }
     }
 }
 

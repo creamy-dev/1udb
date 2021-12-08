@@ -7,7 +7,7 @@ test("initializes database", async() => {
 })
 
 test("force updates database", async() => {
-    await db.updateDatabase();
+    await db.updateDatabase(true);
 })
 
 test("adds test with content test", async() => {
