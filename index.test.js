@@ -3,6 +3,7 @@ const db = new Database(__dirname + "/db.json");
 
 test("initializes database", async() => {
     await db.serialize(true);
+    expect(db.json).toStrictEqual(JSON.parse(`{"keys": [], "names": []}`));
 })
 
 test("force updates database", async() => {
