@@ -6,11 +6,7 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
-      - name: Lists contents of workspace.
-        run: ls ${{ github.workspace }}
       - name: Installs NPM packages
         run: cd ${{ github.workspace }} && npm install
-      - name: Lists contents of workspace, again.
-        run: ls ${{ github.workspace }}
       - name: Runs testing.
         run: cd ${{ github.workspace }} && npm test
