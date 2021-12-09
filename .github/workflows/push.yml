@@ -6,6 +6,5 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
-        run: |
+      - run: |
           ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
