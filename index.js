@@ -195,7 +195,7 @@ class Database {
     /**
      * pre-initialization of database; ran when typing 'const db = new Database()'
      * @param {string} name location of database
-     * @param {boolean} shouldForceUpdate if false, run in "ramdisk"
+     * @param {boolean} shouldForceUpdate optional; if false, run in "ramdisk"
      */
     constructor(name, shouldForceUpdate) {
         this.name = name;
