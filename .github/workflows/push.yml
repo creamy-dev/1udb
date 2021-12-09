@@ -9,4 +9,4 @@ jobs:
       - name: Installs NPM packages
         run: cd ${{ github.workspace }} && npm install
       - name: Runs testing.
-        run: cd ${{ github.workspace }} && npm test
+        run: npm test
