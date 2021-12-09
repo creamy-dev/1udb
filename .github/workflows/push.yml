@@ -1,7 +1,7 @@
-on: push
-name: tests code
+on: [push]
+name: testing
 jobs:
-  build-and-publish:
+  test:
     name: tests code
     runs-on: ubuntu-latest
     steps:
