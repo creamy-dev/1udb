@@ -1,20 +1,11 @@
+name: Tests Code
 on: [push]
-name: testing
 jobs:
-  test:
-    name: tests code
+  testing:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - name: npm install
-        uses: actions/npm@master
-        with:
-          args: install
-      - name: npm test
-        uses: actions/npm@master
-        with:
-          args: run test
-      - name: npm lint
-        uses: actions/npm@master
-        with:
-          args: run lint
+      - name: Check out repository code
+        uses: actions/checkout@v2
+        run: |
+          ls ${{ github.workspace }}
+      - run: echo "🍏 This job's status is ${{ job.status }}."
