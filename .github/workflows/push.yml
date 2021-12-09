@@ -7,6 +7,6 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v2
       - name: Installs NPM packages
-        run: cd ${{ github.workspace }} && npm install
+        run: npm install
       - name: Runs testing.
         run: npm test
