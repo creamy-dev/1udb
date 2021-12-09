@@ -59,7 +59,3 @@ test("removes windows", async() => {
     await db.remove("windows");
     expect(await db.get("windows")).toBe(null);
 })
-
-test("test fail", async() => {
-    expect(1+1).toBe(3);
-})
