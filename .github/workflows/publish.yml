@@ -1,0 +1,20 @@
+name: Auto publish and create release
+
+on:
+  push:
+    branches:
+      - prod
+
+jobs:
+  build:
+    runs-on:
+      steps:
+        - uses: actions/checkout@v1
+        - uses: actions/setup-node@v1
+          with:
+            node-version: 17
+            registry-url: https://registry.npmjs.org/
+        - run: npm install --production
+        - run: npm publish --access public
+          env:
+            NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
