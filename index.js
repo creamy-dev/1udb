@@ -8,7 +8,7 @@ const path = require('path');
 class Database {
     /**
      * initializes the database by setting some internal paramaters.
-     * @param {boolean} wipe if true, wipe the database 
+     * @param {boolean} optional; wipes the database if true
      */
     async serialize(wipe) {
         let data = {};
