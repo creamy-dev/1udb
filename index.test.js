@@ -55,6 +55,11 @@ test("renames test to be 'windows'", async() => {
     expect(await db.get("windows")).toBe("1udb");
 })
 
+test("adds 'test' with content 'test' and 'testing' with new line", async() => {
+    await db.add("test", "test\ntesting");
+    expect(await db.get("test")).toBe("test\ntesting");
+})
+
 test("removes windows", async() => {
     await db.remove("windows");
     expect(await db.get("windows")).toBe(null);
