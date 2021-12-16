@@ -38,6 +38,10 @@ class Database {
 
         let writeKeys = json.keys;
         let writeNames = json.names;
+        
+        if (writeKeys.indexOf(key) !== -1) {
+            throw("Error: Item must not already be in database!");
+        }
 
         writeKeys.push(key);
         writeNames.push(value);
