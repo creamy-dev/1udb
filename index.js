@@ -49,7 +49,7 @@ class Database {
         json.keys = writeKeys;
         json.names = writeNames;
 
-        this.json = json;
+        this.json = json.replaceAll("\n", "\\n");
 
         await this.updateDatabase();
     }
@@ -96,7 +96,7 @@ class Database {
         json.keys = writeKeys;
         json.names = writeNames;
 
-        this.json = json;
+        this.json = json.replaceAll("\n", "\\n");
 
         await this.updateDatabase();
     }
@@ -138,7 +138,7 @@ class Database {
         json.keys = writeKeys;
         json.names = writeNames;
 
-        this.json = json;
+        this.json = json.replaceAll("\n", "\\n");
 
         await this.updateDatabase();
     }
@@ -161,7 +161,7 @@ class Database {
         json.keys = writeKeys;
         json.names = writeNames;
 
-        this.json = json;
+        this.json = json.replaceAll("\n", "\\n");
 
         await this.updateDatabase();
     }
