@@ -49,7 +49,7 @@ class Database {
         json.keys = writeKeys;
         json.names = writeNames;
 
-        this.json = json;
+        this.json = JSON.parse(JSON.stringify(json).replaceAll("\n", "\\n"));
 
         await this.updateDatabase();
     }
@@ -96,7 +96,7 @@ class Database {
         json.keys = writeKeys;
         json.names = writeNames;
 
-        this.json = json;
+        this.json = JSON.parse(JSON.stringify(json).replaceAll("\n", "\\n"));
 
         await this.updateDatabase();
     }
@@ -138,7 +138,7 @@ class Database {
         json.keys = writeKeys;
         json.names = writeNames;
 
-        this.json = json;
+        this.json = JSON.parse(JSON.stringify(json).replaceAll("\n", "\\n"));
 
         await this.updateDatabase();
     }
@@ -161,7 +161,7 @@ class Database {
         json.keys = writeKeys;
         json.names = writeNames;
 
-        this.json = json;
+        this.json = JSON.parse(JSON.stringify(json).replaceAll("\n", "\\n"));
 
         await this.updateDatabase();
     }
@@ -190,7 +190,7 @@ class Database {
                 }
             }
 
-            this.json = `{"keys": [${writeKeys.join(", ")}], "names": [${writeNames.join(", ")}]}`;
+            this.json = `{"keys": [${writeKeys.join(", ")}], "names": [${writeNames.join(", ")}]}`.replaceAll("\n", "\\n");
             await fs.writeFileSync(this.name, this.json);
             this.json = JSON.parse(this.json);
         }
