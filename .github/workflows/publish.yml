@@ -13,7 +13,6 @@ jobs:
           node-version: 17
           registry-url: https://registry.npmjs.org/
       - run: rm -rf .github
-      - run: rm -rf docs
       - run: rm -rf index.test.js
       - run: npm install --production
       - run: npm publish --access public

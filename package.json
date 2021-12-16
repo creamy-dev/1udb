@@ -1,6 +1,6 @@
 {
   "name": "@creamy-dev/1udb",
-  "version": "0.2.2",
+  "version": "1.0.0",
   "description": "Small database that uses local JSON files.",
   "main": "index.js",
   "scripts": {

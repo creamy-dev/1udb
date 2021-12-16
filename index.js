@@ -38,6 +38,10 @@ class Database {
 
         let writeKeys = json.keys;
         let writeNames = json.names;
+        
+        if (writeKeys.indexOf(key) !== -1) {
+            throw("Error: Item must not already be in database!");
+        }
 
         writeKeys.push(key);
         writeNames.push(value);
@@ -100,7 +104,7 @@ class Database {
     /**
      * querys for item in database
      * @param {string} value value of item to search for
-     * @returns JSON object with name and value of item
+     * @returns JSON object with name and value of item, or null if it doesn't exist.
      */
     async query(value) {
         let json = this.json;
