@@ -28,7 +28,25 @@ class Database {
         this.json = JSON.parse(data);
 
         if (this.json.version != "1") {
-          throw("DeprecationError: Old database does not support base64 encoding fix.");
+          console.warn("DeprecationWarning: Old database does not support base64 encoding fix. Automatically fixing.");
+          
+          let keys = this.json.keys;
+          let names = this.json.names;
+
+          let len = keys.length;
+          let i = 0;
+
+          while (i < len-1) {
+            keys[i] = Buffer.from(keys[i]).toString("base64");
+            names[i] = Buffer.from(names[i]).toString("base64");
+            i++;
+          }
+
+          this.json.keys = keys;
+          this.json.names = names;
+          this.json.version = 1;
+
+          this.updateDatabase();
         }
     }
 
