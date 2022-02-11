@@ -20,12 +20,16 @@ class Database {
                 throw("Wipe file")
             }
         } catch (e) {
-            await fs.writeFileSync(this.name, `{"keys": [], "names": []}`);
-            data = `{"keys": [], "names": []}`;
+            await fs.writeFileSync(this.name, `{"keys": [], "names": [], "version": 1}`);
+            data = `{"keys": [], "names": [], "version": 1}`;
         }
 
         this.name = path.join(this.name);
         this.json = JSON.parse(data);
+
+        if (this.json.version != "1") {
+          throw("DeprecationError: Old database does not support base64 encoding fix.");
+        }
     }
 
     /**
@@ -33,8 +37,11 @@ class Database {
      * @param {string} key name of item to be stored
      * @param {string} value item to be stored
      */
-    async add(key, value) {
+    async add(keyOrig, valueOrig) {
         let json = this.json;
+
+        let key = Buffer.from(JSON.stringify(keyOrig).replace(/"\\/g, "")).toString("base64");
+        let value = Buffer.from(JSON.stringify(valueOrig).replace(/"\\/g, "")).toString("base64");
 
         let writeKeys = json.keys;
         let writeNames = json.names;
@@ -49,7 +56,7 @@ class Database {
         json.keys = writeKeys;
         json.names = writeNames;
 
-        this.json = JSON.parse(JSON.stringify(json).replaceAll("\n", "\\n"));
+        this.json = json;
 
         await this.updateDatabase();
     }
@@ -63,17 +70,23 @@ class Database {
         let data = this.json;
 
         let keys = data.keys;
-        let index = keys.indexOf(key);
+        let index = keys.indexOf(Buffer.from(JSON.stringify(key).replace(/"\\/g, "")).toString("base64"));
 
         if (index === -1) {
             return null;
         }
 
-        if (typeof JSON.parse(JSON.stringify(data.names[index])) === 'object') {
-            return JSON.parse(JSON.stringify(data.names[index]));
+        try {
+          let tmpType = JSON.parse(Buffer.from(data.names[index], "base64").toString("utf-8"));
+
+          if (typeof tmpType === 'object') {
+            return tmpType;
+          }
+        } catch (e) {
+
         }
 
-        return data.names[index];
+        return JSON.parse(Buffer.from(data.names[index], "base64").toString("utf-8"));
     }
 
     /**
@@ -87,7 +100,7 @@ class Database {
         let writeNames = json.names;
 
         for (let i = 0; i < writeKeys.length; i++) {
-            if (writeKeys[i] === key) {
+            if (writeKeys[i] === Buffer.from(`\"${key}\"`).toString("base64")) {
                 writeKeys.splice(i, 1);
                 writeNames.splice(i, 1);
             }
@@ -96,7 +109,7 @@ class Database {
         json.keys = writeKeys;
         json.names = writeNames;
 
-        this.json = JSON.parse(JSON.stringify(json).replaceAll("\n", "\\n"));
+        this.json = json;
 
         await this.updateDatabase();
     }
@@ -123,11 +136,14 @@ class Database {
 
     /**
      * changes data in database
-     * @param {string} key name of key to be searched for
-     * @param {string} value value to change data to
+     * @param {string} origKey name of key to be searched for
+     * @param {string} origValue value to change data to
      */
-    async changeValue(key, value) {
+    async changeValue(keyOrig, valueOrig) {
         let json = this.json;
+
+        let key = Buffer.from(JSON.stringify(keyOrig).replace(/"\\/g, "")).toString("base64");
+        let value = Buffer.from(JSON.stringify(valueOrig).replace(/"\\/g, "")).toString("base64");
 
         let writeKeys = json.keys;
         let writeNames = json.names;
@@ -138,7 +154,7 @@ class Database {
         json.keys = writeKeys;
         json.names = writeNames;
 
-        this.json = JSON.parse(JSON.stringify(json).replaceAll("\n", "\\n"));
+        this.json = json;
 
         await this.updateDatabase();
     }
@@ -148,8 +164,11 @@ class Database {
      * @param {string} key original name of key 
      * @param {string} newKey new name of key
      */
-    async changeKey(key, newKey) {
+    async changeKey(keyOrig, newKeyOrig) {
         let json = this.json;
+
+        let key = Buffer.from(JSON.stringify(keyOrig).replace(/"\\/g, "")).toString("base64");
+        let newKey = Buffer.from(JSON.stringify(newKeyOrig).replace(/"\\/g, "")).toString("base64");
 
         let writeKeys = json.keys;
         let writeNames = json.names;
@@ -161,7 +180,7 @@ class Database {
         json.keys = writeKeys;
         json.names = writeNames;
 
-        this.json = JSON.parse(JSON.stringify(json).replaceAll("\n", "\\n"));
+        this.json = json;
 
         await this.updateDatabase();
     }
@@ -190,7 +209,7 @@ class Database {
                 }
             }
 
-            this.json = `{"keys": [${writeKeys.join(", ")}], "names": [${writeNames.join(", ")}]}`.replaceAll("\n", "\\n");
+            this.json = `{"keys": [${writeKeys.join(", ")}], "names": [${writeNames.join(", ")}], "version": 1}`;
             await fs.writeFileSync(this.name, this.json);
             this.json = JSON.parse(this.json);
         }
