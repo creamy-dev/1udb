@@ -1,3 +1,4 @@
+### BREAKING CHANGE IN 1.1.0, DO NOT UPDATE. MIGRATION CODE WILL COME SOON.
 # 1udb
 Imagine a database as lite as a 1U chassis.
 ## Installation Instructions
