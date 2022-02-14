@@ -7,6 +7,13 @@ const path = require('path');
 
 class Database {
     /**
+     * gets the default config, used internally for code testing.
+     * @returns default config
+     */
+    getDefaultConfig() {
+        return(`{"keys": [], "names": [], "version": 1}`);
+    }
+    /**
      * initializes the database by setting some internal paramaters.
      * @param {boolean} optional; wipes the database if true
      */
@@ -20,8 +27,8 @@ class Database {
                 throw("Wipe file")
             }
         } catch (e) {
-            await fs.writeFileSync(this.name, `{"keys": [], "names": [], "version": 1}`);
-            data = `{"keys": [], "names": [], "version": 1}`;
+            await fs.writeFileSync(this.name, this.getDefaultConfig());
+            data = this.getDefaultConfig();
         }
 
         this.name = path.join(this.name);
