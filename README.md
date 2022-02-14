@@ -1,5 +1,5 @@
 # 1udb
-Imagine a database as lite as a 1U chassis.
+Imagine a database as lite as a 1U chassis. [Try me on RunKit!](https://runkit.com/creamy-dev/620a9cb19396410008c71800)
 ## Installation Instructions
 NPM install '@creamy-dev/1udb', in production mode.
 ```
