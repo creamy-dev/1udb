@@ -40,10 +40,7 @@ class Database {
           let keys = this.json.keys;
           let names = this.json.names;
 
-          let len = keys.length;
-          let i = 0;
-
-          while (i < len-1) {
+          let i = 0; while (i < keys.length-1) {
             keys[i] = Buffer.from(keys[i]).toString("base64");
             names[i] = Buffer.from(names[i]).toString("base64");
             i++;
@@ -65,8 +62,8 @@ class Database {
     async add(keyOrig, valueOrig) {
         let json = this.json;
 
-        let key = Buffer.from(JSON.stringify(keyOrig).replace(/"\\/g, "")).toString("base64");
-        let value = Buffer.from(JSON.stringify(valueOrig).replace(/"\\/g, "")).toString("base64");
+        let key = Buffer.from(JSON.stringify(keyOrig)).toString("base64");
+        let value = Buffer.from(JSON.stringify(valueOrig)).toString("base64");
 
         let writeKeys = json.keys;
         let writeNames = json.names;
@@ -95,7 +92,7 @@ class Database {
         let data = this.json;
 
         let keys = data.keys;
-        let index = keys.indexOf(Buffer.from(JSON.stringify(key).replace(/"\\/g, "")).toString("base64"));
+        let index = keys.indexOf(Buffer.from(JSON.stringify(key)).toString("base64"));
 
         if (index === -1) {
             return null;
