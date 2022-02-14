@@ -8,7 +8,7 @@ const path = require('path');
 class Database {
     /**
      * gets the default config, used internally for code testing.
-     * @returns default config
+     * @returns {string} default config
      */
     getDefaultConfig() {
         return(`{"keys": [], "names": [], "version": 1}`);
