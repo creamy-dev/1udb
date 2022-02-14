@@ -7,6 +7,13 @@ const path = require('path');
 
 class Database {
     /**
+     * gets the default config, used internally for code testing.
+     * @returns {string} default config
+     */
+    getDefaultConfig() {
+        return(`{"keys": [], "names": [], "version": 1}`);
+    }
+    /**
      * initializes the database by setting some internal paramaters.
      * @param {boolean} optional; wipes the database if true
      */
@@ -20,8 +27,8 @@ class Database {
                 throw("Wipe file")
             }
         } catch (e) {
-            await fs.writeFileSync(this.name, `{"keys": [], "names": [], "version": 1}`);
-            data = `{"keys": [], "names": [], "version": 1}`;
+            await fs.writeFileSync(this.name, this.getDefaultConfig());
+            data = this.getDefaultConfig();
         }
 
         this.name = path.join(this.name);
@@ -33,10 +40,7 @@ class Database {
           let keys = this.json.keys;
           let names = this.json.names;
 
-          let len = keys.length;
-          let i = 0;
-
-          while (i < len-1) {
+          let i = 0; while (i < keys.length-1) {
             keys[i] = Buffer.from(keys[i]).toString("base64");
             names[i] = Buffer.from(names[i]).toString("base64");
             i++;
@@ -58,8 +62,8 @@ class Database {
     async add(keyOrig, valueOrig) {
         let json = this.json;
 
-        let key = Buffer.from(JSON.stringify(keyOrig).replace(/"\\/g, "")).toString("base64");
-        let value = Buffer.from(JSON.stringify(valueOrig).replace(/"\\/g, "")).toString("base64");
+        let key = Buffer.from(JSON.stringify(keyOrig)).toString("base64");
+        let value = Buffer.from(JSON.stringify(valueOrig)).toString("base64");
 
         let writeKeys = json.keys;
         let writeNames = json.names;
@@ -88,7 +92,7 @@ class Database {
         let data = this.json;
 
         let keys = data.keys;
-        let index = keys.indexOf(Buffer.from(JSON.stringify(key).replace(/"\\/g, "")).toString("base64"));
+        let index = keys.indexOf(Buffer.from(JSON.stringify(key)).toString("base64"));
 
         if (index === -1) {
             return null;
@@ -214,17 +218,8 @@ class Database {
             let writeNames = json.names;
 
             for (let i = 0; i < writeKeys.length; i++) {
-                if (typeof writeKeys[i] === 'string') {
-                    writeKeys[i] = `"${writeKeys[i]}"`;
-                }
-
-                if (typeof writeNames[i] === 'string') {
-                    writeNames[i] = `"${writeNames[i]}"`;
-                }
-
-                if (typeof writeNames[i] === 'object') {
-                    writeNames[i] = JSON.stringify(writeNames[i]);
-                }
+                writeKeys[i] = `"${writeKeys[i]}"`;
+                writeNames[i] = `"${writeNames[i]}"`;
             }
 
             this.json = `{"keys": [${writeKeys.join(", ")}], "names": [${writeNames.join(", ")}], "version": 1}`;
