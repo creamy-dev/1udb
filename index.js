@@ -221,17 +221,8 @@ class Database {
             let writeNames = json.names;
 
             for (let i = 0; i < writeKeys.length; i++) {
-                if (typeof writeKeys[i] === 'string') {
-                    writeKeys[i] = `"${writeKeys[i]}"`;
-                }
-
-                if (typeof writeNames[i] === 'string') {
-                    writeNames[i] = `"${writeNames[i]}"`;
-                }
-
-                if (typeof writeNames[i] === 'object') {
-                    writeNames[i] = JSON.stringify(writeNames[i]);
-                }
+                writeKeys[i] = `"${writeKeys[i]}"`;
+                writeNames[i] = `"${writeNames[i]}"`;
             }
 
             this.json = `{"keys": [${writeKeys.join(", ")}], "names": [${writeNames.join(", ")}], "version": 1}`;
