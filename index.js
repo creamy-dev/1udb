@@ -4,7 +4,6 @@ const path = require('path');
 /**
  * class for database
  */
-
 class Database {
     /**
      * gets the default config, used internally for code testing.
@@ -56,8 +55,8 @@ class Database {
 
     /**
      * adds data into a database
-     * @param {string} key name of item to be stored
-     * @param {string} value item to be stored
+     * @param {string} keyOrig name of item to be stored
+     * @param {string} valueOrig item to be stored
      */
     async add(keyOrig, valueOrig) {
         let json = this.json;
@@ -158,8 +157,8 @@ class Database {
 
     /**
      * changes data in database
-     * @param {string} origKey name of key to be searched for
-     * @param {string} origValue value to change data to
+     * @param {string} keyOrig name of key to be searched for
+     * @param {string} valueOrig value to change data to
      */
     async changeValue(keyOrig, valueOrig) {
         let json = this.json;
@@ -183,8 +182,8 @@ class Database {
 
     /**
      * renames key in database
-     * @param {string} key original name of key 
-     * @param {string} newKey new name of key
+     * @param {string} keyOrig original name of key 
+     * @param {string} newKeyOrig new name of key
      */
     async changeKey(keyOrig, newKeyOrig) {
         let json = this.json;
