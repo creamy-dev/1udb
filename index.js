@@ -38,11 +38,10 @@ class Database {
           
           let keys = this.json.keys;
           let names = this.json.names;
-
-          let i = 0; while (i < keys.length-1) {
+            
+          for (var i = 0; i < keys.length-1; i++) {
             keys[i] = Buffer.from(keys[i]).toString("base64");
             names[i] = Buffer.from(names[i]).toString("base64");
-            i++;
           }
 
           this.json.keys = keys;
